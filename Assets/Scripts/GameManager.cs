@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -9,17 +10,20 @@ public class GameManager : MonoBehaviour
 
     public Text scoreText;
     private int score = 0;
+    private int targetScore = 4;
 
 
     private void Awake()
     {
-        // Enforce one instance
-        if (Instance != null && Instance != this)
+        if(Instance == null)
         {
-            Destroy(gameObject);
-            return;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        Instance = this;
+        else
+        {
+         Destroy(gameObject);   
+        }
     }
 
 
@@ -29,6 +33,10 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
+public void IncrementScore()
+    {
+        AddScore(1);
+    }
 
     private void UpdateUI()
     {
@@ -36,6 +44,12 @@ public class GameManager : MonoBehaviour
         {
             scoreText.text = $"Score: {score}";
         }
+    }
+
+    public void LoadNextScene()
+    {
+        
+        SceneManager.LoadScene("VictoryScene");
     }
 }
 
